@@ -1,0 +1,327 @@
+{
+ "cells": [
+  {
+   "cell_type": "markdown",
+   "id": "161b7420",
+   "metadata": {
+    "ExecuteTime": {
+     "end_time": "2021-09-14T20:29:41.857186Z",
+     "start_time": "2021-09-14T20:29:41.850648Z"
+    }
+   },
+   "source": [
+    "# Problem Set 1"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "b0e0bf55",
+   "metadata": {},
+   "source": [
+    "$№ 8.16$  \n",
+    "$z = f(x, y) \\hspace{0.25 cm}$  $ \\Delta_x = 10^{-3}$  \n",
+    "a) $z = x + 10y$  \n",
+    "Пусть $z^{\\prime}$, $x^{\\prime}$ - точное значение z и x соответственно.  \n",
+    "Тогда найдем абсолютную ошибку вычисления :  \n",
+    "$ |z^{\\prime} - z| = | x^{\\prime} + 10y^{\\prime} - x - 10y| = |x^{\\prime} - x\n",
+    "+ 10(y^{\\prime} - y)| \\leq \\Delta_x + 10\\Delta_y$.  \n",
+    "Если $\\Delta_z \\approx \\Delta_x = 10^{-3}$, то $\\Delta_y = \\dfrac{10^{-3}}{10} = 10^{-4}$\n",
+    "\n",
+    "б) $ z = xy + xy^2$  \n",
+    "Аналогично предыдущему пункту: \n",
+    "$|z^{\\prime} - z| = |x^{\\prime}y^{\\prime} + x^{\\prime}{y^{\\prime}}^2 - \n",
+    "xy - xy^2| = |(x + \\Delta_x)(y + \\Delta_y) + (x + \\Delta_x)(x + \\Delta_y)^2) -xy - xy^2|$  \n",
+    "Пренебрегаем порядками малости выше второго.  \n",
+    "Тогда $|z^{\\prime} - z| = | (y^2 + y)\\Delta_x + (2xy + x)\\Delta_y| \n",
+    "\\leq |(y^2 + y)|\\Delta_x + |(2xy + x)|\\Delta_y$  \n",
+    "Порядки выражений при погрешностях равны (их отношение равно 1) $\\Rightarrow$ \n",
+    "$\\Delta_y = \\dfrac{\\Delta_x}{1} = 10^{-3}$  \n",
+    "\n",
+    "в) $z = \\dfrac{x}{y}$  \n",
+    "Используем другой способ найти абсолютную погрешность.  \n",
+    "Распишем погрешность как малое приращение функции двух переменных:  \n",
+    "$$\\Delta_z = (f_x)^{\\prime}\\cdot \\Delta_x +  (f_y)^{\\prime}\\cdot \\Delta_y$$ \n",
+    "Тогда $|z^{\\prime} - z| \\leq |\\dfrac{1}{y}| \\Delta_x + |\\dfrac{x}{y^2}| \\Delta_y$.\n",
+    "Отсюда $\\Delta_y = 10^{-3}$\n"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "c61675d3",
+   "metadata": {
+    "ExecuteTime": {
+     "end_time": "2021-09-14T21:26:35.050397Z",
+     "start_time": "2021-09-14T21:26:35.045888Z"
+    }
+   },
+   "source": [
+    "$№ 8.20$     \n",
+    "a) Используем для оценки погрешности представления функции $y = f(x)$ ряд Тейлора\n",
+    "с остаточным членом в форме Лагранжа $\\Rightarrow$ $y \\approx \\sum\\limits_{k=1}^n \\dfrac{{f}^{(k)}(0)}{k!}x^k + \\dfrac{{f}^{(n+1)}(\\xi)}{(n+1)!}x^{n+1}$  \n",
+    "Тогда $\\max\\limits_{0 \\leq \\xi \\leq x}$ $ \\left|\\dfrac{{f}^{(n+1)}(\\xi)}{(n+1)!}x^{n+1}\\right| \\leq \\Delta_x = 10^{-3}$  \n",
+    "Пусть дан $y = sin(x)$ на интервале $[0,1]$  \n",
+    "Тогда из условий: $\\xi \\leq x \\leq 1 $ и ${sin(\\xi)}^{(n+1)} \\leq 1$ получаем $\\dfrac{1}{(n+1)!} \\leq 10^{-3}$  \n",
+    "Получаем уравнение $(n+1)! \\leq 1000$"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 6,
+   "id": "a92f9e1f",
+   "metadata": {
+    "ExecuteTime": {
+     "end_time": "2021-09-14T22:23:47.340587Z",
+     "start_time": "2021-09-14T22:23:47.329974Z"
+    },
+    "scrolled": true
+   },
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "Answer for y = sin(x) 0 < x < 1 is 6\n"
+     ]
+    }
+   ],
+   "source": [
+    "from math import factorial\n",
+    "i = 0\n",
+    "\n",
+    "while True:\n",
+    "    if (factorial(i + 1) > 1000):\n",
+    "        break\n",
+    "    else:\n",
+    "        i += 1\n",
+    "        \n",
+    "print(\"Answer for y = sin(x) 0 < x < 1 is {}\".format(i))"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "6546e45c",
+   "metadata": {},
+   "source": [
+    "б) Для второго пункта аналогично $\\xi \\leq 11$, и ${sin(\\xi)}^{(n+1)} \\leq 1 $. \n",
+    "Тогда получаем уравнение $\\dfrac{11^{n+1}}{(n+1)!} \\leq 10^{-3}$"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 8,
+   "id": "8e89024b",
+   "metadata": {
+    "ExecuteTime": {
+     "end_time": "2021-09-14T22:38:37.836180Z",
+     "start_time": "2021-09-14T22:38:37.830157Z"
+    },
+    "scrolled": false
+   },
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "Answer for y = sin(x) 10 < x < 11 is 33\n"
+     ]
+    }
+   ],
+   "source": [
+    "i = 0\n",
+    "\n",
+    "while True:\n",
+    "    if ((11**(i+1))/factorial(i + 1) <= 1e-3):\n",
+    "        break\n",
+    "    else:\n",
+    "        i += 1\n",
+    "        \n",
+    "print(\"Answer for y = sin(x) 10 < x < 11 is {}\".format(i))"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "d0754634",
+   "metadata": {},
+   "source": [
+    "б) Пусть $\\epsilon$ - абсолютная погрешность при вычислении одного слагаемого $\\dfrac{{f}^{(k)}(0)}{k!}x^k$  \n",
+    "Тогда $\\left|\\dfrac{{f}^{(k)}(0)}{k!}x^k  - \\dfrac{{f}^{(k)}(0)}{k!}x^k \n",
+    "\\cdot {\\epsilon}^k \\right| \\leq \\Delta_x = 10^{-3} $  \n",
+    "Получаем ограничение (учитывая, что $sin(x) \\leq 1$ и $cos(x) \\leq 1$  \n",
+    "$$ \\dfrac{x^k(1 - (1+\\epsilon)^k)}{k!} \\leq 10^{-3}$$  \n",
+    "Отсюда находим условия:\n",
+    "При $x \\in [0, 1]$ $x^k \\leq 1$ $\\Rightarrow$ $(1+\\epsilon)^k + \\dfrac{k!}{1000} \\geq 1$  \n",
+    "ри $x \\in [10, 11]$ $\\Rightarrow$ $(1+\\epsilon)^k + \\dfrac{k!}{1000\\cdot 11^k} \\geq 1$"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "e8ce3d0e",
+   "metadata": {},
+   "source": [
+    "$№ 8.23$  \n",
+    "Определим погрешность в определении корней уравнения \n",
+    "$ay^3 + by^2 + d = 0$  \n",
+    "a = 1, b = 2, d = -3, $\\Delta_a = \\Delta_b = \\Delta_d = 10^{-2}$  \n",
+    "Количество корней уравнения: $y^3 + 2y^2 - 3 = 0$ равно одному, что видно из графика. \n",
+    "Проверкой убеждаемся, что $y_0 = 1$ - корень уравнения."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 15,
+   "id": "a303ef3e",
+   "metadata": {
+    "ExecuteTime": {
+     "end_time": "2021-09-14T23:20:11.619954Z",
+     "start_time": "2021-09-14T23:20:11.476917Z"
+    }
+   },
+   "outputs": [
+    {
+     "data": {
+      "image/png": "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\n",
+      "text/plain": [
+       "<Figure size 432x288 with 1 Axes>"
+      ]
+     },
+     "metadata": {
+      "needs_background": "light"
+     },
+     "output_type": "display_data"
+    }
+   ],
+   "source": [
+    "import numpy as np\n",
+    "import matplotlib.pyplot as plt\n",
+    "\n",
+    "x = np.linspace(-3, 2.5, 100)\n",
+    "y = x**3 + 2*x**2 - 3\n",
+    "fig, ax = plt.subplots()\n",
+    "\n",
+    "ax.plot(x, y)\n",
+    "ax.grid()\n",
+    "\n",
+    "ax.hlines(0, x.min(), x.max(), color = 'r')\n",
+    "\n",
+    "plt.show()"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "2201a331",
+   "metadata": {},
+   "source": [
+    "Найдем полный дифференциал $$\\Delta_y = (y^{\\prime}_a)\\cdot \\Delta_a +  (f^{\\prime}_b)\\cdot \\Delta_b + (f^{\\prime}_d)\\cdot \\Delta_d$$ \n",
+    "Найдем частные производные из условия, что $f = ay^3 + by^2 + d = 0$  \n",
+    "$\\dfrac{df}{da} = \\dfrac{\\partial f}{\\partial y} \\dfrac{\\partial y}{\\partial a} + \n",
+    "\\dfrac{\\partial f}{\\partial a} = (3ay^2 + 2by)(y_a)^{\\prime} + y^3 = 0$  \n",
+    "Подставим  $y_0$ и получим: $(y^{\\prime}_a) = \\dfrac{1}{7}$. Аналогично получаем \n",
+    "$(y^{\\prime}_b) = \\dfrac{1}{7}$ и $(y^{\\prime}_d) = \\dfrac{1}{7}$.  \n",
+    "Отсюда $\\Delta_y = \\dfrac{1}{7}( \\Delta_a + \\Delta_b + \\Delta_d) = \\dfrac{3}{7} \\cdot 10^{-3}$"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "cd2e62ad",
+   "metadata": {
+    "ExecuteTime": {
+     "end_time": "2021-09-14T23:59:12.387978Z",
+     "start_time": "2021-09-14T23:59:12.384304Z"
+    }
+   },
+   "source": [
+    "$№ 7.5$  \n",
+    "Пусть $\\lambda$ - произвольное собственное число матрицы $A$, где $\\|A\\|$ - ee норма  \n",
+    "Для собственного числа выполнено $Ax = \\lambda x$  \n",
+    "Из свойства субмультипликативности матричной нормы(лекция): $|\\lambda|\\cdot \\|x\\|=\\|\\lambda x\\| = \\|Ax\\| \\leq  \\|A\\| \\|x\\| \\Rightarrow |\\lambda|\\cdot \\|x\\| \\leq  \\|A\\| \\|x\\|$  "
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "f9552d9d",
+   "metadata": {},
+   "source": [
+    "$№ 7.25$\n",
+    "По определению: $\\mu(A) = \\|A\\|\\|A^{-1}\\| $  \n",
+    "Докажем, что $\\mu(AB) \\leq \\mu(A)\\mu(B)$  \n",
+    "$\\mu(AB) = \\|AB\\| \\|(AB)^{-1}\\|  = \\|AB\\| \\|B^{-1}A^{-1}\\| \\leq \\|A\\|\\|A^{-1}\\|\\|B\\|\\|B^{-1}\\| = \\mu(A)\\mu(B)$  \n",
+    "Проверим для данных матриц это утверждение:\n",
+    "$A$ = $\\begin{pmatrix}\n",
+    "      1& 2\\\\\n",
+    "      2& 1\\\\\n",
+    "    \\end{pmatrix} \\hspace{0.5 cm}$\n",
+    "$B$ = $\\begin{pmatrix}\n",
+    "      3& 1\\\\\n",
+    "      1& 3\\\\\n",
+    "    \\end{pmatrix}$\n"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 21,
+   "id": "9b294d0a",
+   "metadata": {
+    "ExecuteTime": {
+     "end_time": "2021-09-15T01:14:21.722960Z",
+     "start_time": "2021-09-15T01:14:21.704471Z"
+    }
+   },
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "m(XY) = 6.0, m(X) = 3.0, m(Y) = 2.0 - утверждение верно\n"
+     ]
+    }
+   ],
+   "source": [
+    "from numpy import linalg\n",
+    "\n",
+    "x = np.array([[1, 2],[2, 1]])\n",
+    "y = np.array([[3, 1],[1, 3]])\n",
+    "A = x @ y\n",
+    "\n",
+    "x_inv = np.linalg.inv(x)\n",
+    "y_inv = np.linalg.inv(y)\n",
+    "A_inv = np.linalg.inv(A)\n",
+    "\n",
+    "#p=1 норма:\n",
+    "m_A = linalg.norm(A, ord = 1) * linalg.norm(A_inv, ord = 1)\n",
+    "m_x = linalg.norm(x, ord = 1) * linalg.norm(x_inv, ord = 1)\n",
+    "m_y = linalg.norm(y, ord = 1) * linalg.norm(y_inv, ord = 1)\n",
+    "\n",
+    "print(\"m(XY) = {}, m(X) = {}, m(Y) = {} - утверждение верно\".format(m_A, m_x, m_y))"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "e6b5ab67",
+   "metadata": {},
+   "outputs": [],
+   "source": []
+  }
+ ],
+ "metadata": {
+  "kernelspec": {
+   "display_name": "Python 3",
+   "language": "python",
+   "name": "python3"
+  },
+  "language_info": {
+   "codemirror_mode": {
+    "name": "ipython",
+    "version": 3
+   },
+   "file_extension": ".py",
+   "mimetype": "text/x-python",
+   "name": "python",
+   "nbconvert_exporter": "python",
+   "pygments_lexer": "ipython3",
+   "version": "3.8.8"
+  }
+ },
+ "nbformat": 4,
+ "nbformat_minor": 5
+}
